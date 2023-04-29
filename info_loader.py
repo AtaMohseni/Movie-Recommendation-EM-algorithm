@@ -28,5 +28,19 @@ def UserID():
         User_ids.append(line.strip())
     return User_ids
 
+def Movie_ratings():
+    try:
+        fhand = open('./hw8_ratings_fa18.txt')
+        
+    except:
+        print ('one or more the files do not exist')
+        return None
+    ratings = []
+    for line in fhand:
+        ratings.append(list (line.split()))
+        
+    return ratings
+
+
 
         
