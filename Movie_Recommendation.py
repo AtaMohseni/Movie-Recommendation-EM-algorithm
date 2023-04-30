@@ -19,5 +19,7 @@ class Movie_Recommend():
         #any of moviegoer groups
         import numpy as np
         self.probRgivenZ = np.random.random_sample((len(self.movie_list),self.number_of_clusters))
+        #list that rank the movies for user from most recommended movie to least recommended
+        self.rank = []
         
         
