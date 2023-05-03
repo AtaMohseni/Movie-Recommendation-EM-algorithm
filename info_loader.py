@@ -50,7 +50,7 @@ def probRgivenZ():
         return None
     probs = []
     for line in fhand:
-        probs.append(list(line.split()))
+        probs.append(list(map(float,list (line.split()) )))
         
     return probs
     
