@@ -41,6 +41,17 @@ def Movie_ratings():
         
     return ratings
 
-
-
+def probRgivenZ():
+    try:
+        fhand = open('./hw8_probRgivenZ_init.txt')
+        
+    except:
+        print ('one or more the files do not exist')
+        return None
+    probs = []
+    for line in fhand:
+        probs.append(list(line.split()))
+        
+    return probs
+    
         
