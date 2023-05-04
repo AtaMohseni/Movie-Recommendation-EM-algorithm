@@ -7,7 +7,7 @@ Created on Sat Apr 29 14:55:49 2023
 import numpy as np
 from info_loader import MovieList, Movie_ratings,probRgivenZ
 class Movie_Recommend():
-    
+    """ class that represent naive Bayes Belief Network"""
     def __init__(self,movie_list,probRgivenZ,number_of_clusters):
         
         #list of movies for rating and recommendation (list of length n)
