@@ -25,9 +25,11 @@ class Movie_Recommend():
         #self.probRgivenZ = np.random.random_sample((len(self.movie_list),self.number_of_clusters))
         self.probRgivenZ = np.array(probRgivenZ) 
         
-        #normalized log-likelihood of movie rating data (will be 
-        #calculated in training) 
+        #normalized log-likelihood of movie rating data (only can be 
+        #calculated in training using all users rating data) 
         self.log_likelihood_normalized = None
+        #calculate and store movies mean popularity while training with all users data
+        self.mean_popularity = None
                             
 def product_probs_Rj_given_Zi(MVR, user_rating , z_cluster_index):
     """ Z cluster should be a number from 0 to (number_of_cluster - 1)
@@ -93,14 +95,30 @@ def Mstep(MVR,data):
                 elif user_rating[movie_index] == '?':
                     node_with_parents_numenator += rhoit[cluster,user_index]*MVR.probRgivenZ[movie_index,cluster]
             MVR.probRgivenZ[movie_index,cluster] = node_with_parents_numenator/(MVR.probZ[cluster]*len(data))
+def popularity(MVR,data):
+    MVR.mean_popularity = dict()
+    for movie_index, movie in enumerate(MVR.movie_list):
+        recommended = 0
+        not_recommended = 0
+        
+        for user_index,user in enumerate(data):   
+            if user[movie_index] == '1':
+                recommended += 1
+            elif user[movie_index] == '0':
+                not_recommended += 1
             
+        MVR.mean_popularity[movie] = recommended / (recommended + not_recommended)
+        
 def train(MVR,data):
     """ function to check if users rating data is in list format. if yes
-    then it starts updating CPT entries of Belief Network
+    then it starts updating CPT entries of Belief Network, and calculate 
+    movies mean popularity and store them in MVR.popularity attribute 
     
     -MVR: Movie_recommend instance
     data: list of lists for user ratings"""
     
+    if MVR.mean_popularity == None:
+        popularity(MVR,data)
     if type(data) == list:
         Mstep(MVR,data)
     else:
@@ -145,4 +163,4 @@ if __name__ == "__main__":
         train(MR,rating_data)
         if iteration in printing:
             print(iteration,'  ',MR.log_likelihood_normalized)
-    rank_and_recommend_unseen_movies(MR,rating_data[1])
+    #rank_and_recommend_unseen_movies(MR,rating_data[1])
