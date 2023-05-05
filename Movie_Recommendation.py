@@ -129,6 +129,9 @@ def train(MVR,data):
         print('movie-rating data should be list format of length t users, each t element should be a list of n ratings corresponding to n title of movie')
         return None
 def rank_and_recommend_unseen_movies(MVR,user_rating):
+    """ given movie rating of a user, it rank and recommend other unseen movies
+    with recommendation score to the same user"""
+    
     if ('1' in user_rating) or ('0' in user_rating):
         rank_and_recommend = dict()
         numerator_for_each_cluster = []
@@ -156,6 +159,7 @@ def rank_and_recommend_unseen_movies(MVR,user_rating):
         print('\n','Movie Titles','\t','Recemmendation scores','\n')
         for movie in sorted(list(MVR.mean_popularity), key = MVR.mean_popularity.__getitem__,reverse = True):
             print(movie,'    ',MVR.mean_popularity[movie])
+            
 if __name__ == "__main__":
     # Load required data to initialize Movie_Recommend class
     movie_list = MovieList()
