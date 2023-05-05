@@ -57,8 +57,8 @@ def E_step(MVR, data):
     -MVR: Movie_recommend instance
     -data: list of lists for user ratings """
     
-    #array of shape (z,t) where z is number of movie goer groups, t is number 
-    #of user in data
+    #rhoit is array of shape (z,t) where z is number of movie goer groups, 
+    # t is number of user in data
     rhoit = np.zeros((MVR.number_of_clusters,len(data)))
     sum_log_likelihood_elements = 0
     
@@ -95,7 +95,11 @@ def Mstep(MVR,data):
                 elif user_rating[movie_index] == '?':
                     node_with_parents_numenator += rhoit[cluster,user_index]*MVR.probRgivenZ[movie_index,cluster]
             MVR.probRgivenZ[movie_index,cluster] = node_with_parents_numenator/(MVR.probZ[cluster]*len(data))
+            
 def popularity(MVR,data):
+    """ function to calculate mean popularity of movies using entire rating data 
+    and store them as attribute of Movie_Recommend class in a dictionary format"""
+    
     MVR.mean_popularity = dict()
     for movie_index, movie in enumerate(MVR.movie_list):
         recommended = 0
