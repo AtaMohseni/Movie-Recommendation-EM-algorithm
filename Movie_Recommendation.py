@@ -106,14 +106,38 @@ def train(MVR,data):
     else:
         print('movie-rating data should be list format of length t users, each t element should be a list of n ratings corresponding to n title of movie')
         return None
-     
+def rank_and_recommend_unseen_movies(MVR,user_rating):
+    if ('1' in user_rating) or ('0' in user_rating):
+        rank_and_recommend = dict()
+        numerator_for_each_cluster = []
+        denominator = 0
+        for cluster_index, element in enumerate(MVR.probZ):
+            products = product_probs_Rj_given_Zi(MVR, user_rating,cluster_index)
+            denominator += element * products
+            numerator_for_each_cluster.append(element*products)
+        rhoi1 = (np.array(numerator_for_each_cluster)/denominator)
+        for movie_index, movie in enumerate(MVR.movie_list):
+            if user_rating[movie_index] == "?":
+
+                expected_rating = 0
+                for index_rhoi, rhoi in enumerate(rhoi1):
+                    expected_rating += rhoi * MVR.probRgivenZ[movie_index,index_rhoi]
+                rank_and_recommend[movie] = expected_rating
+            
+        if len(rank_and_recommend)>0:    
+            for movie in sorted(list(rank_and_recommend), key = rank_and_recommend.__getitem__,reverse = True):
+                print(movie,rank_and_recommend[movie])
+        else:
+            print("there are no unseen movies")
+    else:
+        pass
 if __name__ == "__main__":
     # Load required data to initialize Movie_Recommend class
     movie_list = MovieList()
     initial_probRgivenZ = probRgivenZ()
     rating_data = Movie_ratings()
     #initialize movie recommendation class
-    MR  = Movie_Recommend(movie_list,initial_probRgivenZ, 5)
+    MR  = Movie_Recommend(movie_list,initial_probRgivenZ, 4)
     
     #train several iteration and print normalize log-likelihood at some iteration
     printing = [0,1,2,4,8,16,32,64,128]
@@ -121,3 +145,4 @@ if __name__ == "__main__":
         train(MR,rating_data)
         if iteration in printing:
             print(iteration,'  ',MR.log_likelihood_normalized)
+    rank_and_recommend_unseen_movies(MR,rating_data[1])
