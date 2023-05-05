@@ -146,13 +146,16 @@ def rank_and_recommend_unseen_movies(MVR,user_rating):
                     expected_rating += rhoi * MVR.probRgivenZ[movie_index,index_rhoi]
                 rank_and_recommend[movie] = expected_rating
             
-        if len(rank_and_recommend)>0:    
+        if len(rank_and_recommend)>0: 
+            print('\n','Movie Titles','\t','Recemmendation scores','\n')
             for movie in sorted(list(rank_and_recommend), key = rank_and_recommend.__getitem__,reverse = True):
-                print(movie,rank_and_recommend[movie])
+                print(movie,'    ',rank_and_recommend[movie])
         else:
             print("there are no unseen movies")
     else:
-        pass
+        print('\n','Movie Titles','\t','Recemmendation scores','\n')
+        for movie in sorted(list(MVR.mean_popularity), key = MVR.mean_popularity.__getitem__,reverse = True):
+            print(movie,'    ',MVR.mean_popularity[movie])
 if __name__ == "__main__":
     # Load required data to initialize Movie_Recommend class
     movie_list = MovieList()
@@ -167,4 +170,4 @@ if __name__ == "__main__":
         train(MR,rating_data)
         if iteration in printing:
             print(iteration,'  ',MR.log_likelihood_normalized)
-    #rank_and_recommend_unseen_movies(MR,rating_data[1])
+    rank_and_recommend_unseen_movies(MR,rating_data[1])
