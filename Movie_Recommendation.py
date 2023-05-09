@@ -152,7 +152,7 @@ def rank_and_recommend_unseen_movies(MVR,user_rating):
             
         if len(rank_and_recommend)>0:
             print('\n')
-            print('Movie Titles:','      ','Recemmendation scores:','\n')
+            print('Movie Titles:','    ','Recemmendation scores:','\n')
             for movie in sorted(list(rank_and_recommend), key = rank_and_recommend.__getitem__,reverse = True):
                 print(movie,'------',round(rank_and_recommend[movie],2))
                 time.sleep(0.1)
@@ -160,7 +160,7 @@ def rank_and_recommend_unseen_movies(MVR,user_rating):
             print("there are no unseen movies")
     else:
         print('\n')
-        print('Movie Titles:','      ','Recemmendation scores:','\n')
+        print('Movie Titles:','    ','Recemmendation scores:','\n')
         for movie in sorted(list(MVR.mean_popularity), key = MVR.mean_popularity.__getitem__,reverse = True):
             print(movie,'------',round(MVR.mean_popularity[movie],2))
             time.sleep(0.1)
@@ -171,7 +171,7 @@ def check_user_movie_title_input(name_of_movie,list_of_movies,already_watched):
     if name_of_movie.lower() in map(lambda x: x.lower(), list_of_movies):
         valid_input = True 
     elif name_of_movie.lower() in map(lambda x: x.lower(), already_watched):
-        print('you already rated watched and rated this movie')
+        print('you already rated this movie')
     else:
         print('Not a valid movie name')
     return valid_input 
@@ -220,6 +220,7 @@ def ask_for_new_user_rating(MVR):
                 rating_status = check_for_rating_input(rating)
             
             if rating_status:
+                print('your rating for movie',movie_title,'is',rating,'.')
                 for movie_index, movie in enumerate(MVR.movie_list):
                     if movie.lower().strip() == movie_title.lower().strip():
                         user_rating[movie_index] = rating
@@ -228,10 +229,7 @@ def ask_for_new_user_rating(MVR):
     
     return user_rating
             
-            
-        
-        
-               
+           
 if __name__ == "__main__":
     # Load required data to initialize Movie_Recommend class
     movie_list = MovieList()
@@ -246,4 +244,5 @@ if __name__ == "__main__":
         train(MR,rating_data)
         if iteration in printing:
             print(iteration,'  ',MR.log_likelihood_normalized)
+    #ask for user rating, then rank and recommend unseen movies to user
     rank_and_recommend_unseen_movies(MR,ask_for_new_user_rating(MR))
